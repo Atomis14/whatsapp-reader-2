@@ -2,11 +2,12 @@
 
 const { ipcRenderer, contextBridge  } = require('electron');
 
-contextBridge.exposeInMainWorld('ipc', {
+contextBridge.exposeInMainWorld('ipccc', {
   test: {
     sendPing(message) {
       ipcRenderer.send('ping2', message);
-    }
+    },
+    testString: "Hello"
   },
   files: {
 

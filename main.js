@@ -2,6 +2,7 @@ const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 const appConfig = require('electron-settings');
 const path = require('path');
 require('electron-debug')({ showDevTools: true });
+require('electron-reload')(__dirname);
 
 
 async function windowStateKeeper() {
