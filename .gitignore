@@ -1,0 +1,4 @@
+node_modules
+out/
+chats
+chats.sqlite3
