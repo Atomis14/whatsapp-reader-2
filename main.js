@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 const appConfig = require('electron-settings');
 const path = require('path');
 require('electron-debug')({ showDevTools: true });
@@ -67,6 +67,15 @@ app.whenReady().then(() => {
   createWindow();
 
   Menu.setApplicationMenu(null);  // damit keine Menübar angezeigt wird
+
+  ipcMain.handle('openFile', (event) => {
+    return dialog.showOpenDialogSync({
+      properties: ['openFile'],
+      filters: [
+        { name: 'Text', extensions: ['txt'] },
+      ]
+    });
+  });
 
   // wenn kein Fenster offen ist, eines erstellen
   app.on('activate', function () {

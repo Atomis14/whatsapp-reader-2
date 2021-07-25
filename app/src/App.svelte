@@ -5,13 +5,14 @@
 
 <main>
 	<div>
-		<button>Import Chats</button>
+		<button on:click={electron.chatImport.showDialogBox}>Select File</button>
+		<button on:click={electron.chatImport.parseFile}>Import File</button>
 	</div>
 </main>
 
 <style lang="scss">
 		@import "./scss/definitions.scss";
-		
+
 		main {
 			display: flex;
 			align-items: stretch;
