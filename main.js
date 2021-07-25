@@ -3,6 +3,7 @@ const appConfig = require('electron-settings');
 const path = require('path');
 require('electron-debug')({ showDevTools: true });
 require('electron-reload')(__dirname);
+require('dotenv').config();
 
 
 async function windowStateKeeper() {
@@ -76,6 +77,8 @@ app.whenReady().then(() => {
       ]
     });
   });
+
+  //console.log(app.getPath('userData')); // ort für user uploaded content
 
   // wenn kein Fenster offen ist, eines erstellen
   app.on('activate', function () {
