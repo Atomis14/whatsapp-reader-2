@@ -8,3 +8,8 @@
 
 ## Limits
 - if you've left a chat, message is not recognized as a system notification
+
+## Planned features
+- chat statistics
+- notification when chat with same name was already imported
+- language agnostic chat import (currently only german)

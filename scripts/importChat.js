@@ -2,9 +2,8 @@ const { ipcRenderer  } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
-
-const db = require('better-sqlite3')('chats.sqlite3', { verbose: console.log });
-console.log(db.prepare("SELECT * FROM chats").all());
+const utils = require('./utils.js');
+const db = utils.setupDB();
 
 let store = {
   files: [],
@@ -25,10 +24,10 @@ async function parseFile() {
     return;
   }
 
-  const fileName = path.basename(store.files[0], '.txt');
-  const chatName = fileName.match(/WhatsApp Chat mit (.*)(?=\.txt)/gi); // todo: Sprachunabhängig machen (nach drittem Leerschlag matchen)
-  
-  const fileStream = fs.createReadStream(store.files[0]);
+  const fileName = path.basename(store.files[store.files.length-1], '.txt');
+  const chatName = fileName.match(/WhatsApp Chat mit (.*)/i)[1]; // TODO: Sprachunabhängig machen (nach drittem Leerschlag matchen)
+
+  const fileStream = fs.createReadStream(store.files[store.files.length-1]);
   const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity })
 
   let messages = [];
@@ -40,20 +39,24 @@ async function parseFile() {
       const time = line.substring(10, 15);
       let sender;
       let content;
+      let type;
 
       if(!line.substring(18).includes(':')) {   // system notification (e.g. change of group description...)
         content = line.substring(18);
         sender = '_SYSTEM';
+        type = 'system';
       } else {
         sender = (line.match(/ - ([^:]*)/) || [])[1];
         content = (line.match(/: (.*)/) || [])[1];
+        type = 'message';
       }
 
       message = {
         sender,
         date,
         time,
-        content
+        content,
+        type
       };
 
       messages.push(message);
@@ -73,7 +76,19 @@ async function parseFile() {
 }
 
 async function writeToDB(name, messages) {
-
+  const chatId = db.prepare("INSERT INTO chats (name) VALUES (?)").run(name).lastInsertRowid;
+  db.transaction(() => {
+    for(const message of messages) {
+      db.prepare("INSERT INTO messages (chat, sender, date, time, content, type) VALUES (:chatId, :sender, :date, :time, :content, :type)").run({
+        chatId,
+        sender: message.sender,
+        date: message.date,
+        time: message.time,
+        content: message.content,
+        type: message.type
+      });
+    }  
+  })();
 }
 
 module.exports = {

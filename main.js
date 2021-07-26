@@ -62,10 +62,12 @@ async function createWindow() {
   //console.log(appConfig.file());
 
   win.loadFile('app/public/index.html');
+
+  return win;
 }
 
 app.whenReady().then(() => {
-  createWindow();
+  const win = createWindow();
 
   Menu.setApplicationMenu(null);  // damit keine Menübar angezeigt wird
 
@@ -76,6 +78,10 @@ app.whenReady().then(() => {
         { name: 'Text', extensions: ['txt'] },
       ]
     });
+  });
+
+  ipcMain.on('getUserDataPath', (event) => {
+    event.returnValue = app.getPath('userData');
   });
 
   //console.log(app.getPath('userData')); // ort für user uploaded content

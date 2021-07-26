@@ -1,21 +1,19 @@
 <script>
-	import Sidebar from './components/Sidebar.svelte';
-	import ChatContainer from './components/ChatContainer.svelte';
 	import ChatImport from './components/ChatImport.svelte';
+	import ChatsContainer from './components/ChatsContainer.svelte';
+	import MessagesContainer from './components/MessagesContainer.svelte';
 </script>
 
 <main>
 	<div>
 		<ChatImport />
+		<hr>
+		<ChatsContainer />
+		<hr>
+		<MessagesContainer />
 	</div>
 </main>
 
 <style lang="scss">
 		@import "./scss/definitions.scss";
-
-		main {
-			display: flex;
-			align-items: stretch;
-			min-height: 100vh;
-		}
 </style>
