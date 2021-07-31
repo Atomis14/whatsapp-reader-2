@@ -3,7 +3,7 @@
 </script>
 
 <div class="ChatImport">
-  Import Chat <br>
+  Import Chat: 
   <button on:click={electron.chatImport.showDialogBox}>Select File</button>
   <button on:click={electron.chatImport.parseFile}>Import File</button>
 </div>

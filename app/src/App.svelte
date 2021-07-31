@@ -11,6 +11,7 @@
 		<ChatsContainer />
 		<hr>
 		<MessagesContainer />
+
 	</div>
 </main>
 
