@@ -69,15 +69,22 @@ async function createWindow() {
 app.whenReady().then(() => {
   const win = createWindow();
 
-  Menu.setApplicationMenu(null);  // damit keine Menübar angezeigt wird
+  Menu.setApplicationMenu(null);  // hide menubar
 
-  ipcMain.handle('openFile', (event) => {
-    return dialog.showOpenDialogSync({
-      properties: ['openFile'],
-      filters: [
-        { name: 'Text', extensions: ['txt'] },
-      ]
-    });
+  ipcMain.handle('openDialog', (event, type) => {
+    switch(type) {
+      case 'file':
+        return dialog.showOpenDialogSync({
+          properties: ['openFile', 'multiSelections'],
+          filters: [
+            { name: 'Text', extensions: ['txt'] },
+          ]
+        });
+      case 'directory':
+        return dialog.showOpenDialogSync({
+          properties: ['openDirectory', 'multiSelections'],
+        });
+    }
   });
 
   ipcMain.on('getUserDataPath', (event) => {

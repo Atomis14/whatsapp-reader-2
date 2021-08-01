@@ -1,7 +1,5 @@
 <script>
   import { chatStore } from '../store.js';
-
-  console.log($chatStore);
 </script>
 
 <div class="messagesContainer">

@@ -2,9 +2,13 @@ const { ipcRenderer  } = require('electron');
 const path = require('path');
 const sqlite = require('better-sqlite3');
 
+store = {
+  userDataPath: ipcRenderer.sendSync('getUserDataPath')
+}
+
 function setupDB() {
-  const userDataPath = ipcRenderer.sendSync('getUserDataPath');
-  const db = new sqlite(path.join(userDataPath, 'chats.sqlite3'));
+  //const userDataPath = ipcRenderer.sendSync('getUserDataPath');
+  const db = new sqlite(path.join(store.userDataPath, 'chats.sqlite3'));
   const stmt = `
     CREATE TABLE IF NOT EXISTS chats (
       id INTEGER PRIMARY KEY,
@@ -26,5 +30,6 @@ function setupDB() {
 }
 
 module.exports = {
-  setupDB
+  setupDB,
+  store
 }
