@@ -15,7 +15,7 @@ function chatHandler() {
       currentOffset += 10;
     }
 
-    const olderMessages = electron.db.loadMessages(id, currentOffset);   // load newest messages (reverse order because newest messages alre loaded first like in every chat)
+    const olderMessages = window.electron.db.loadMessages(id, currentOffset);   // load newest messages (reverse order because newest messages alre loaded first like in every chat)
     update(messages => {
       const newArray = [...olderMessages.reverse(), ...messages];
       return newArray; // append loaded messages to already loaded ones

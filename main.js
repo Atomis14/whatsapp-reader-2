@@ -1,9 +1,11 @@
 const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 const appConfig = require('electron-settings');
 const path = require('path');
-require('electron-debug')({ showDevTools: true });
-require('electron-reload')(__dirname);
 require('dotenv').config();
+require('electron-debug')({ showDevTools: true });
+try {
+	require('electron-reloader')(module);
+} catch {}
 
 
 async function windowStateKeeper() {

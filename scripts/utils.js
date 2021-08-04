@@ -1,5 +1,6 @@
 const { ipcRenderer  } = require('electron');
 const path = require('path');
+const fs = require('fs-extra');
 const sqlite = require('better-sqlite3');
 
 store = {
@@ -29,7 +30,27 @@ function setupDB() {
   return db;
 }
 
+function resetApp() {
+  const db = setupDB();
+
+  // reset DB
+  db.transaction(() => {
+    for (table of ['messages', 'chats']) {
+      db.prepare(`DROP TABLE IF EXISTS ${table}`).run();
+    }
+  })();
+
+  // delete chats folder in appdata
+  fs.rmdir(path.join(store.userDataPath, 'chats'), { recursive: true }, (err) => {
+    if(err) {
+      throw err;
+    }
+    console.log('Removed path successfully.');
+  });
+}
+
 module.exports = {
   setupDB,
+  resetApp,
   store
 }

@@ -11,10 +11,15 @@
 		<ChatsContainer />
 		<hr>
 		<MessagesContainer />
-
+		<p>
+			test
+			<span>lol</span>
+		</p>
 	</div>
 </main>
 
 <style lang="scss">
-		@import "./scss/definitions.scss";
+	:global {
+		@import "./scss/main.scss";
+	}
 </style>

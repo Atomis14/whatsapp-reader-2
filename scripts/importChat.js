@@ -114,7 +114,7 @@ async function parseFile(file) {
             type = 'file';
           }
         } else {  //// normal message
-          type = 'message';
+          type = 'text';
         }
       }
 
@@ -134,7 +134,7 @@ async function parseFile(file) {
           date: previousMessage.date,
           time: previousMessage.time,
           content: line,
-          type: 'message'
+          type: 'text'
         });
     } else { // append line to content of previous message
       //try {

@@ -4,8 +4,10 @@ import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
+
 import sveltePreprocess from 'svelte-preprocess';
-import scss from "rollup-plugin-scss";
+//const config = require('./svelte.config.js');
+//import config from './svelte.config';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -40,7 +42,15 @@ export default {
 	},
 	plugins: [
 		svelte({
-			preprocess: sveltePreprocess(),
+			preprocess: sveltePreprocess({
+				sourceMap: !production,
+				scss: {
+					prependData: `@import './src/scss/definitions.scss';`
+				},
+				postcss: {
+					plugins: [require('autoprefixer')()]
+				}
+			}),
 			compilerOptions: {
 				// enable run-time checks when not in production
 				dev: !production
@@ -48,7 +58,6 @@ export default {
 		}),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
-		scss(),
 		css({ output: 'bundle.css' }),
 
 		// If you have external dependencies installed from

@@ -1,12 +1,12 @@
 <script>
   import { chatStore } from '../store.js';
 
-  const chats = electron.db.getChats();
+  const chats = window.electron.db.getChats();
 </script>
 
 <div class="ChatsContainer">
   {#each chats as chat}
-    <a on:click={() => chatStore.loadMessages(chat.id)}>{chat.name}</a>
+    <a on:click|preventDefault={() => chatStore.loadMessages(chat.id)}>{chat.name}</a>
   {/each}
 </div>
 
