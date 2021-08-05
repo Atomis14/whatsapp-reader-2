@@ -107,7 +107,8 @@ async function parseFile(file) {
         content = (line.match(/: (.*)/) || [])[1];
        
         if(file = content.match(/(.*) \(Datei angehängt\)/)) {  //// file or image
-          content = file[1];  // remove (Datei angehängt) from content
+          content = file[1].replace(/[^ -~]+/g, '');  // remove (Datei angehängt) from content
+
           if(path.extname(content) == '.jpg') {
             type = 'image';
           } else {

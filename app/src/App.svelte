@@ -5,21 +5,18 @@
 </script>
 
 <main>
-	<div>
-		<ChatImport />
-		<hr>
+		<!-- <ChatImport /> -->
 		<ChatsContainer />
-		<hr>
 		<MessagesContainer />
-		<p>
-			test
-			<span>lol</span>
-		</p>
-	</div>
 </main>
 
 <style lang="scss">
 	:global {
 		@import "./scss/main.scss";
+	}
+
+	main {
+		display: flex;
+		height: 100vh;
 	}
 </style>
