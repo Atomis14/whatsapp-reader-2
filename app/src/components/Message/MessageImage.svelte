@@ -1,7 +1,5 @@
 <script>
   export let message;
-
-  console.log(window.electron);
 </script>
 
 <div class="MessageImage">

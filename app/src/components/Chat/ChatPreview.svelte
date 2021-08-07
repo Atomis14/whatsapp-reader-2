@@ -2,7 +2,7 @@
   import { chatStore } from '../../store.js';
 
   export let chat;
-  export let activeChat;
+  export let activeChat = null;
 
   function selectChat() {
     chatStore.loadMessages(chat.id);
@@ -19,7 +19,7 @@
   .ChatPreview {
     display: flex;
     align-items: center;
-    min-height: 20px;
+    min-height: 55px;
     padding: 15px 10px;
     &:hover {
       cursor: pointer;

@@ -49,8 +49,14 @@ function resetApp() {
   });
 }
 
+function customEvent(name, detail={}) {
+  const event = new CustomEvent(name, { detail });
+  document.dispatchEvent(event);
+}
+
 module.exports = {
   setupDB,
   resetApp,
+  customEvent,
   store
 }

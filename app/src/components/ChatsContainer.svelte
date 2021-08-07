@@ -12,9 +12,11 @@
 
 <div class="ChatsContainer">
   <Navigation />
-  {#each chats as chat (chat.id)}
-    <ChatPreview {chat} bind:activeChat={activeChat} />
-  {/each}
+  <div class="ChatsContainer__chats">
+    {#each chats as chat (chat.id)}
+      <ChatPreview {chat} bind:activeChat={activeChat} />
+    {/each}
+  </div>
 </div>
 
 <style lang="scss">
@@ -23,9 +25,10 @@
     flex-direction: column;
     flex-shrink: 0;
     width: 350px;
-    height: 100%;
-    overflow-y: auto;
-    border-right: 1px solid $color-grey-light;
     background-color: $color-grey-lighter;
+    &__chats {
+      overflow-y: auto;
+      height: 100%;
+    }
   }
 </style>

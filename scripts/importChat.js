@@ -1,5 +1,4 @@
 const { ipcRenderer  } = require('electron');
-const { ReadStream } = require('fs');
 const fs = require('fs-extra');
 const path = require('path');
 const readline = require('readline');
@@ -14,12 +13,15 @@ let store = {
 function showDialogBox(type) {
   ipcRenderer.invoke('openDialog', type).then((result) => {
     if(result) {
+      const paths = result.map(file => path.basename(file, '.txt'));
       switch(type) {
         case 'file':
           store.files.push(...result);
+          utils.customEvent('fileSelected', { paths });
           break;
         case 'directory':
           store.directories.push(...result);
+          utils.customEvent('folderSelected', { paths });
           break;
       }
     }

@@ -51,6 +51,8 @@ async function createWindow() {
     title: 'WhatsApp Reader',
     width: windowState.width,
     height: windowState.height,
+    minWidth: 900,
+    minHeight: 650,
     x: windowState.x,
     y: windowState.y,
     webPreferences: {
