@@ -6,7 +6,11 @@ module.exports = {
   // same configuration data as in rollup.config.js under plugins -> svelte -> preprocess
   preprocess: sveltePreprocess({
     scss: {
-      prependData: `@import 'app/src/scss/definitions.scss';`   // only difference: app/ at the beginning of the path
+      // only difference: app/ at the beginning of the path
+      prependData: `
+        @import 'app/src/scss/definitions.scss';
+        @import 'app/src/scss/mixins.scss';
+      `
     }
   }),
 };

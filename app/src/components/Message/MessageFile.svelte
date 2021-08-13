@@ -3,7 +3,7 @@
 </script>
 
 <div class="MessageFile">
-  <img src="../src/images/file.svg" alt="favicon">
+  <img src="images/file.svg" alt="favicon">
   {message.content}
 </div>
 

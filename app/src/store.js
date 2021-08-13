@@ -1,31 +1,40 @@
 import { writable } from 'svelte/store';
 
 function chatHandler() {
-  const { subscribe, set, update } = writable([]);
+  const defaultData = {
+    currentId: null,
+    messages: []
+  }
+
+  const { subscribe, set, update } = writable(defaultData);
 
   let currentId;
   let currentOffset = 0;
   function loadMessages(id) {
-
     if(id !== currentId) { // clear old messages if new chat is selected
       currentId = id;
       currentOffset = 0;
-      set([]);
+      set({
+        currentId,
+        messages: []
+      });
     } else {
-      currentOffset += 10;
+      currentOffset += 30;
     }
 
     const olderMessages = window.electron.db.loadMessages(id, currentOffset);   // load newest messages (reverse order because newest messages alre loaded first like in every chat)
-    update(messages => {
-      const newArray = [...olderMessages.reverse(), ...messages];
-      return newArray; // append loaded messages to already loaded ones
+    update(data => {
+      return {
+        currentChat: currentId,
+        messages: [...olderMessages.reverse(), ...data.messages]  // append loaded messages to already loaded ones
+      }; 
     });
   }
 
 	return {
 		subscribe,
 		loadMessages,
-		reset: () => set([])
+		reset: () => set(defaultData)
 	};
 }
 

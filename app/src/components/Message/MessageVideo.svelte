@@ -2,27 +2,36 @@
   export let message;
 
   let active = false;
-  let imagePath = '/' + window.electron.utils.store.userDataPath + '/chats/' + message.chat + '/' + message.content;
+  let videoPath = '/' + window.electron.utils.store.userDataPath + '/chats/' + message.chat + '/' + message.content;
+  let video;
+
+  $: {
+    if(video && !active) {
+      video.pause();
+    }
+  }
 
   function toggleOverlay(e) {
     e.stopPropagation();
-    if (e && e.target.classList.contains('bigImage')) return;
+    if (e && e.target.classList.contains('video')) return;
     active = !active;
   }
 </script>
 
-<div class="MessageImage" class:active={active}>
-  <img src={imagePath} on:click={toggleOverlay} class="image">
+<div class="MessageVideo" class:active={active}>
+  <img src={videoPath} on:click={toggleOverlay} class="image">
   <br>
   {message.content}
   <div class="overlay" on:click={toggleOverlay}>
-    <img src={imagePath} class="bigImage">
+    <video controls class="video" bind:this={video}>
+      <source src={videoPath}>
+    </video>
     <img src="images/close-white.svg" class="closeButton" on:click={toggleOverlay}> 
   </div>
 </div>
 
 <style lang="scss">
-  .MessageImage {
+  .MessageVideo {
     &.active {
       .overlay {
         display: flex;
@@ -51,7 +60,7 @@
       background-color: rgba(#000000, 0.7);
       padding: 60px;
       text-align: center;
-      .bigImage {
+      video {
         max-height: 100%;
         max-width: 100%;
         margin-bottom: auto;

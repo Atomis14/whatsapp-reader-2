@@ -1,3 +1,31 @@
+///////////// FONTS
+
+@font-face {
+	font-family: 'Inter';
+	src: url('../fonts/Inter-Regular.ttf') format('truetype');
+	font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter-Medium.ttf') format('truetype');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter-Bold.ttf') format('truetype');
+  font-weight: 800;
+}
+
+$font-family-standard: 'Inter', Helvetica, sans-serif;
+$font-weight-normal: 500;
+$font-weight-bold: 600;
+
+$font-size-sm: 14px;
+
+///////////// COLORS
+
 $color-primary: #00BFA5;
 $color-primary-darkened: #00a38d;
 
@@ -9,7 +37,7 @@ $color-grey-light: #e6e6e6;
 $color-grey-medium: #cecece;
 $color-grey-mediumdark: #afafaf;
 
+///////////// BORDER RADIUS
+
 $border-radius-md: 5px;
 $border-radius-sm: 2px;
-
-$font-family-standard: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";

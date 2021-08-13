@@ -1,4 +1,4 @@
-const { ipcRenderer  } = require('electron');
+const { ipcRenderer, shell } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
 const sqlite = require('better-sqlite3');
@@ -13,7 +13,8 @@ function setupDB() {
   const stmt = `
     CREATE TABLE IF NOT EXISTS chats (
       id INTEGER PRIMARY KEY,
-      name TEXT
+      name TEXT,
+      type TEXT
     );
     CREATE TABLE IF NOT EXISTS messages (
       id INTEGER PRIMARY KEY,
@@ -42,10 +43,9 @@ function resetApp() {
 
   // delete chats folder in appdata
   fs.rmdir(path.join(store.userDataPath, 'chats'), { recursive: true }, (err) => {
-    if(err) {
-      throw err;
-    }
+    if(err) throw err;
     console.log('Removed path successfully.');
+    location.reload();
   });
 }
 
@@ -54,9 +54,14 @@ function customEvent(name, detail={}) {
   document.dispatchEvent(event);
 }
 
+function openInBrowser(url) {
+  shell.openExternal(url);
+}
+
 module.exports = {
   setupDB,
   resetApp,
   customEvent,
+  openInBrowser,
   store
 }

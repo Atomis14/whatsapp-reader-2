@@ -1,13 +1,10 @@
 <script>
-  import { chatStore } from '../store.js';
   import ChatPreview from './Chat/ChatPreview.svelte'
   import Navigation from './Navigation.svelte'
 
   const chats = window.electron.db.getChats();
 
   let activeChat;
-
-  chatStore.loadMessages(8);
 </script>
 
 <div class="ChatsContainer">

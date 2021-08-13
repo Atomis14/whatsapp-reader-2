@@ -13,7 +13,15 @@ let store = {
 function showDialogBox(type) {
   ipcRenderer.invoke('openDialog', type).then((result) => {
     if(result) {
-      const paths = result.map(file => path.basename(file, '.txt'));
+      const paths = result.map(file => {
+        return {
+          name: path.basename(file, '.txt'),
+          path: file
+        }
+      });
+
+      console.log(paths);
+
       switch(type) {
         case 'file':
           store.files.push(...result);
@@ -26,6 +34,15 @@ function showDialogBox(type) {
       }
     }
   });
+}
+
+function removePath(index, name) {
+  if(name == 'folders') {
+    store.directories.splice(index, 1);
+  } else if(name == 'files') {
+    store.files.splice(index, 1);
+  }
+  console.log(store);
 }
 
 function startImport() {
@@ -52,6 +69,8 @@ function startImport() {
                 }
                 return true;
               }});
+            }).catch((e) => {
+              // chatname contains a colon --> error message
             });
           });
         }
@@ -90,6 +109,7 @@ async function parseFile(file) {
   const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity })
 
   let messages = [];
+  let people = [];
   for await (const line of rl) {
     let message;
 
@@ -107,18 +127,24 @@ async function parseFile(file) {
       } else {
         sender = (line.match(/ - ([^:]*)/) || [])[1];
         content = (line.match(/: (.*)/) || [])[1];
-       
+
         if(file = content.match(/(.*) \(Datei angehängt\)/)) {  //// file or image
           content = file[1].replace(/[^ -~]+/g, '');  // remove (Datei angehängt) from content
 
-          if(path.extname(content) == '.jpg') {
+          const fileExtension = path.extname(content);
+          if(fileExtension == '.jpg') {
             type = 'image';
+          } else if(fileExtension == '.mp4') {
+            type = 'video';
           } else {
             type = 'file';
           }
         } else {  //// normal message
           type = 'text';
         }
+
+        people.push(sender);
+        people = [... new Set(people)];
       }
 
       message = {
@@ -140,19 +166,27 @@ async function parseFile(file) {
           type: 'text'
         });
     } else { // append line to content of previous message
-      //try {
+      try {
         messages[messages.length - 1].content += '\n' + line;
-      //} catch {}
+      } catch {}
     }
   }
 
-  //console.log(messages);
-  const chatId = writeToDB(chatName, messages);
+  let chatType;
+  if(people.length > 2) {
+    chatType = 'group';
+  } else {
+    chatType = 'normal';
+  }
+  
+  console.log(people);
+
+  const chatId = writeToDB(chatName, messages, chatType);
   return chatId;
 }
 
-async function writeToDB(name, messages) {
-  const chatId = db.prepare("INSERT INTO chats (name) VALUES (?)").run(name).lastInsertRowid;
+async function writeToDB(name, messages, chatType) {
+  const chatId = db.prepare("INSERT INTO chats (name, type) VALUES (?, ?)").run(name, chatType).lastInsertRowid;
   db.transaction(() => {
     for(const message of messages) {
       db.prepare("INSERT INTO messages (chat, sender, date, time, content, type) VALUES (:chatId, :sender, :date, :time, :content, :type)").run({
@@ -170,6 +204,7 @@ async function writeToDB(name, messages) {
 
 module.exports = {
   showDialogBox,
+  removePath,
   parseFile,
   startImport,
   store

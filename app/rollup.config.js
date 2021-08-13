@@ -4,6 +4,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
+import url from 'postcss-url';
 
 import sveltePreprocess from 'svelte-preprocess';
 //const config = require('./svelte.config.js');
@@ -45,10 +46,20 @@ export default {
 			preprocess: sveltePreprocess({
 				sourceMap: !production,
 				scss: {
-					prependData: `@import './src/scss/definitions.scss';`
+					prependData: `
+						@import './src/scss/definitions.scss';
+						@import './src/scss/mixins.scss';
+					`
 				},
 				postcss: {
-					plugins: [require('autoprefixer')()]
+					plugins: [
+						require('autoprefixer')(),
+						url({
+							url: "inline", // enable inline assets using base64 encoding
+							maxSize: 10, // maximum file size to inline (in kilobytes)
+							fallback: "copy", // fallback method to use if max size is exceeded
+						}),
+					]
 				}
 			}),
 			compilerOptions: {

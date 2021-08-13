@@ -5,7 +5,7 @@
 body {
 	background-color: white;
 	margin: 0;
-	font-family: $font-family-standard;
+	font-family: 'Inter', $font-family-standard;
 }
 
 ::-webkit-scrollbar {
@@ -15,12 +15,26 @@ body {
 		&:hover {
 			background-color: $color-grey-mediumdark;
 		}
+		&:active {
+			background-color: rgb(141, 141, 141);
+		}
 	}
 }
 
 
 h1, h2, h3, h4, h5, h6 {
 	margin: 0;
+}
+
+a {
+	text-decoration: underline;
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+strong, b {
+	font-weight: $font-weight-bold;
 }
 
 .button {

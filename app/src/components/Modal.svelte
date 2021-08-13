@@ -20,9 +20,10 @@
     close() {
       visible = false;
     },
-    toggle() {
+    toggle(e) {
+      if(e && !e.target.classList.contains('Modal')) return;
       visible = !visible;
-    },
+    }
   };
 
   // map strings as action to internal functions
@@ -36,13 +37,14 @@
         break;
       case 'toggle':
         button.action = controls.toggle;
+        break;
     }
   });
 
   modals[id] = controls;
 </script>
 
-<div class="Modal" class:show={visible}>
+<div class="Modal" class:show={visible} on:click={controls.toggle}>
   <div class="Modal__contentButtonContainer">
     <div class="Modal__content">
       {#if title}
@@ -53,7 +55,7 @@
     {#if buttons.length !== 0}
       <div class="Modal__buttons">
         {#each buttons as button}
-          <button class="button {button.class}" on:click={button.action}>
+          <button class="button {button.class}" on:click={button.action} >
             {button.label}
           </button>
         {/each}
@@ -83,7 +85,8 @@
 
     &__contentButtonContainer {
       max-height: 100vh;
-      padding: 20px;
+      margin: 20px;
+      @include dropShadow;
     }
 
     &__content, &__buttons {
@@ -98,7 +101,7 @@
 
       h2 {
         margin-top: -5px;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
       }
     }
 

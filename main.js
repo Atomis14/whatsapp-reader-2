@@ -52,7 +52,7 @@ async function createWindow() {
     width: windowState.width,
     height: windowState.height,
     minWidth: 900,
-    minHeight: 650,
+    minHeight: 700,
     x: windowState.x,
     y: windowState.y,
     webPreferences: {

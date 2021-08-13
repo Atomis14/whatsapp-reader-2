@@ -6,7 +6,6 @@
 
 <style lang="scss">
   .MessageSystem {
-    background-color: rgb(251, 255, 200);
-      color: gray;
+    color: $color-grey-mediumdark;
   }
 </style>

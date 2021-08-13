@@ -1,16 +1,22 @@
 <script>
   export let units = [];
   export let name;
+
+  function removePath(index, name) {
+    window.electron.chatImport.removePath(index, name);
+    units.splice(index, 1);
+    units = units;
+  }
 </script>
 
 <div class="ChatImportSelectedUnits">
   {#if units.length === 0}
     No {name} selected
   {:else}
-    {#each units as unit}
+    {#each units as unit, index}
       <div class="ChatImportSelectedUnits__unit">
-        <img src="images/clear.svg" alt="clear" />
-        <div>{unit}</div>
+        <img src="images/clear.svg" alt="clear" on:click={() => removePath(index, name)} />
+        <div>{unit.name}</div>
       </div>
     {/each}
   {/if}
@@ -18,10 +24,13 @@
 
 <style lang="scss">
   .ChatImportSelectedUnits {
-    margin-bottom: 20px;
-    max-height: 300px;
+    margin-bottom: 25px;
+    height: 300px;
     overflow-y: auto;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     &__unit {
       display: flex;
