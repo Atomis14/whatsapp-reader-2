@@ -29,7 +29,7 @@
     padding: 15px 10px;
     &:hover {
       cursor: pointer;
-      background-color: $color-grey-light;
+      background-color: $color-grey-lighter;
     }
 
     &__image {

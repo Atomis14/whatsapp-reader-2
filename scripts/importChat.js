@@ -20,8 +20,6 @@ function showDialogBox(type) {
         }
       });
 
-      console.log(paths);
-
       switch(type) {
         case 'file':
           store.files.push(...result);
@@ -42,7 +40,6 @@ function removePath(index, name) {
   } else if(name == 'files') {
     store.files.splice(index, 1);
   }
-  console.log(store);
 }
 
 function startImport() {
@@ -51,16 +48,17 @@ function startImport() {
     return;
   }
 
+  // import cats with media
   for(const directory of store.directories) {
     fs.readdir(directory, (err, files) => {
       if(err) throw err;
       files.forEach(file => {
         if(path.extname(file) === '.txt') {
-
           isChatFile(path.join(directory, file)).then(isChat => {
             if(isChat !== true) {
               return;
             }
+            // msg: import chat <directory>
             parseFile(path.join(directory, file)).then(chatId => {
               // copy contents of selected folder into appdata
               fs.copy(directory, path.join(utils.store.userDataPath, 'chats', chatId.toString()), {filter: (src, dest) => {
@@ -70,7 +68,8 @@ function startImport() {
                 return true;
               }});
             }).catch((e) => {
-              // chatname contains a colon --> error message
+              // msg: chatname contains a colon --> error message
+              console.log(e);
             });
           });
         }
@@ -78,9 +77,13 @@ function startImport() {
     });
   }
 
+  // import chats without media
   for(const file of store.files) {
+    // msg: import chat <file>
     parseFile(file);
   }
+
+  // msg: import done
 }
 
 async function isChatFile(file) {
@@ -136,6 +139,8 @@ async function parseFile(file) {
             type = 'image';
           } else if(fileExtension == '.mp4') {
             type = 'video';
+          } else if(fileExtension == '.opus' || fileExtension == '.mp3') {
+            type = 'audio';
           } else {
             type = 'file';
           }
@@ -144,7 +149,7 @@ async function parseFile(file) {
         }
 
         people.push(sender);
-        people = [... new Set(people)];
+        people = [... new Set(people)]; // only unique values
       }
 
       message = {
@@ -156,7 +161,7 @@ async function parseFile(file) {
       };
 
       messages.push(message);
-    } else if(messages.length >= 1 && ['file', 'image'].indexOf(messages[messages.length - 1].type) !== -1) { // if previous message is file or image --> create new message with caption
+    } else if(messages.length >= 1 && ['file', 'image', 'video', 'audio'].indexOf(messages[messages.length - 1].type) !== -1) { // if previous message is file, image, video or audio --> create new message with caption
         const previousMessage = messages[messages.length - 1];
         messages.push({
           sender: previousMessage.sender,
@@ -178,8 +183,6 @@ async function parseFile(file) {
   } else {
     chatType = 'normal';
   }
-  
-  console.log(people);
 
   const chatId = writeToDB(chatName, messages, chatType);
   return chatId;

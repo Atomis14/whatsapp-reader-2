@@ -1,6 +1,16 @@
 <script>
+  import ModalButtons from './ModalButtons.svelte';
+  import { getModal } from '../Modal.svelte';
+
   let resetButtonLabel = 'Reset app';
   let count = 0;
+
+  const buttons = [
+    {
+      label: 'Close',
+      action: () => getModal('about').close()
+    }
+  ];
 
   async function resetApp() {
     count++;
@@ -22,6 +32,7 @@
   <div>This project is open source on <a on:click={() => window.electron.utils.openInBrowser('https://github.com/Atomis14/whatsapp-reader-2')}>Github</a></div>
   <div class="About__resetLink"><a on:click={resetApp}>{resetButtonLabel}</a></div>
 </div>
+<ModalButtons buttons={buttons} />
 
 <style lang="scss">
   .About {

@@ -1,15 +1,36 @@
 <script>
+  import ModalButtons from './ModalButtons.svelte';
+  import { getModal } from '../Modal.svelte';
   import { customEvent } from '../../utils.js';
   import ChatImportSelectedUnits from './ChatImportSelectedUnits.svelte';
 
   let files = [];
   let folders = [];
 
+  let importButtonInactive = true;
+  let buttons;
+  $: buttons = [
+		{
+			label: 'Close',
+			action: () => getModal('import').close()
+		},
+		{
+			label: 'Import',
+			action: window.electron.chatImport.startImport,
+			class: 'button--focus button--right',
+      inactive: importButtonInactive
+		}
+	];
+
+  $: if(files.length === 0 && folders.length === 0) importButtonInactive = true;
+
   customEvent('fileSelected', function(e) {
     files = [...files, ...(e.detail.paths)];
+    importButtonInactive = false;
   });
   customEvent('folderSelected', function(e) {
     folders = [...folders, ...(e.detail.paths)];
+    importButtonInactive = false;
   });
 </script>
 
@@ -30,6 +51,7 @@
     </button>
   </div>
 </div>
+<ModalButtons buttons={buttons} />
 
 <style lang="scss">
   .ChatImport {

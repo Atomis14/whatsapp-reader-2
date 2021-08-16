@@ -6,10 +6,12 @@ body {
 	background-color: white;
 	margin: 0;
 	font-family: 'Inter', $font-family-standard;
+	overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {
 	width: 8px;
+	background-color: #eeeeee;
 	&-thumb {
 		background-color: $color-grey-medium;
 		&:hover {

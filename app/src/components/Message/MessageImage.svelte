@@ -2,7 +2,7 @@
   export let message;
 
   let active = false;
-  let imagePath = '/' + window.electron.utils.store.userDataPath + '/chats/' + message.chat + '/' + message.content;
+  let imagePath = window.electron.utils.createMessageLink(message);
 
   function toggleOverlay(e) {
     e.stopPropagation();
@@ -51,6 +51,7 @@
       background-color: rgba(#000000, 0.7);
       padding: 60px;
       text-align: center;
+      z-index: 1;
       .bigImage {
         max-height: 100%;
         max-width: 100%;

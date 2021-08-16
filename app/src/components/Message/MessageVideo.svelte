@@ -1,8 +1,12 @@
 <script>
+  import { onMount } from 'svelte';
+  import { createMessageLink } from '../../utils.js';
+  import { Video } from 'video-metadata-thumbnails';
+
   export let message;
 
   let active = false;
-  let videoPath = '/' + window.electron.utils.store.userDataPath + '/chats/' + message.chat + '/' + message.content;
+  let videoPath = createMessageLink(message);
   let video;
 
   $: {
@@ -16,10 +20,28 @@
     if (e && e.target.classList.contains('video')) return;
     active = !active;
   }
+
+  let thumbnail;
+
+  onMount(async () => {
+    const videoReader = new Video(videoPath);
+    
+    const metaData = await videoReader.getMetadata();
+    
+    const thumbnailBlob = await videoReader.getThumbnails({ quality: 0.6, start: 0, end: 0 });
+    const reader = new FileReader();
+    reader.readAsDataURL(thumbnailBlob[0].blob); 
+    reader.onloadend = function() {
+        thumbnail = reader.result;                
+    }
+  });
 </script>
 
 <div class="MessageVideo" class:active={active}>
-  <img src={videoPath} on:click={toggleOverlay} class="image">
+  <div class="previewImage">
+    <img src="images/play.svg" class="playIcon">
+    <img src={thumbnail} on:click={toggleOverlay} class="image">
+  </div>
   <br>
   {message.content}
   <div class="overlay" on:click={toggleOverlay}>
@@ -38,13 +60,29 @@
       }
     }
 
-    .image {
-      width: 300px;
-      height: 300px;
-      object-fit: cover;
-      border-radius: $border-radius-md;
-      &:hover {
-        cursor: pointer;
+    .previewImage {
+      display: inline-block;
+      position: relative;
+      .playIcon {
+          widows: 50px;
+          height: 50px;
+          opacity: 0.7;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+          z-index: 1;
+      }
+      .image {
+        width: 300px;
+        height: 300px;
+        object-fit: cover;
+        border-radius: $border-radius-md;
+        filter: brightness(80%);
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
 
@@ -60,6 +98,7 @@
       background-color: rgba(#000000, 0.7);
       padding: 60px;
       text-align: center;
+      z-index: 1;
       video {
         max-height: 100%;
         max-width: 100%;

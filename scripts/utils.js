@@ -58,10 +58,20 @@ function openInBrowser(url) {
   shell.openExternal(url);
 }
 
+function createMessageLink(message) {
+  return path.join(store.userDataPath, 'chats', String(message.chat), message.content);
+}
+
+function getVideoThumbnail(video) {
+
+}
+
 module.exports = {
   setupDB,
   resetApp,
   customEvent,
   openInBrowser,
+  createMessageLink,
+  getVideoThumbnail,
   store
 }

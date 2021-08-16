@@ -1,6 +1,5 @@
 <script>
   export let message;
-  console.log(message)
 </script>
 
 <div class="MessageMetaInformations {message.type}">

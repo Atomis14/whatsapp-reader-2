@@ -22,7 +22,7 @@
     flex-direction: column;
     flex-shrink: 0;
     width: 350px;
-    background-color: $color-grey-lighter;
+    background-color: #fafafa;
     &__chats {
       overflow-y: auto;
       height: 100%;

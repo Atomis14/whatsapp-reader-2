@@ -14,7 +14,7 @@
 <style lang="scss">
   .Navigation {
     padding: 15px 10px;
-    background-color: $color-primary;
+    background-color: $color-grey-light;
     display: flex;
     align-items: center;
     justify-content: space-between;

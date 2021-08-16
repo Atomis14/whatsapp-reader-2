@@ -3,13 +3,21 @@
 </script>
 
 <div class="MessageFile">
-  <img src="images/file.svg" alt="favicon">
-  {message.content}
+  <a>
+    <img src="images/file.svg" alt="favicon">
+    {message.content}
+  </a>
 </div>
 
 <style lang="scss">
   .MessageFile {
-    display: flex;
-    align-items: center;
+    a {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 </style>

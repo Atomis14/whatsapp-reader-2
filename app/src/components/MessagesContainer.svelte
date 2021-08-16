@@ -6,6 +6,7 @@
   import MessageSystem from './Message/MessageSystem.svelte';
   import MessageImage from './Message/MessageImage.svelte';
   import MessageVideo from './Message/MessageVideo.svelte';
+  import MessageAudio from './Message/MessageAudio.svelte';
   import MessageFile from './Message/MessageFile.svelte';
 
   const components = {
@@ -13,6 +14,7 @@
     system: MessageSystem,
     image: MessageImage,
     video: MessageVideo,
+    audio: MessageAudio,
     file: MessageFile,
   };
 
