@@ -7,7 +7,7 @@ let store = {
 }
 
 function getChats() {
-  return db.prepare("SELECT * FROM chats").all();
+  return db.prepare("SELECT * FROM chats ORDER BY name").all();
 }
 
 function loadMessages(id, offset=0) {

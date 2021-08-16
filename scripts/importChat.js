@@ -48,42 +48,52 @@ function startImport() {
     return;
   }
 
-  // import cats with media
+  let totalChats = store.directories.length + store.files.length;
+  let importedChats = 0;
+
+  let counter = 0;
+  // import chats with media
   for(const directory of store.directories) {
-    fs.readdir(directory, (err, files) => {
-      if(err) throw err;
-      files.forEach(file => {
-        if(path.extname(file) === '.txt') {
-          isChatFile(path.join(directory, file)).then(isChat => {
-            if(isChat !== true) {
-              return;
-            }
-            // msg: import chat <directory>
-            parseFile(path.join(directory, file)).then(chatId => {
-              // copy contents of selected folder into appdata
-              fs.copy(directory, path.join(utils.store.userDataPath, 'chats', chatId.toString()), {filter: (src, dest) => {
-                if(fs.lstatSync(src).isDirectory() && src !== directory) {  // ignore all folders except top level folder
-                  return false;
-                }
-                return true;
-              }});
-            }).catch((e) => {
-              // msg: chatname contains a colon --> error message
-              console.log(e);
+    counter++;
+    setTimeout(() => {  // timeout in order for the loading animation to show
+      fs.readdir(directory, (err, files) => {
+        if(err) throw err;
+        files.forEach(file => {
+          if(path.extname(file) === '.txt') {
+            isChatFile(path.join(directory, file)).then(isChat => {
+              if(isChat !== true) {
+                return;
+              }
+              parseFile(path.join(directory, file)).then(chatId => {
+                // copy contents of selected folder into appdata
+                fs.copy(directory, path.join(utils.store.userDataPath, 'chats', chatId.toString()), {filter: (src, dest) => {
+                  if(fs.lstatSync(src).isDirectory() && src !== directory) {  // ignore all folders except top level folder
+                    return false;
+                  }
+                  return true;
+                }});
+              }).catch((e) => {
+                utils.customEvent('importUpdate', { error: `Could not import "${path.basename(directory)}"` });
+              });
             });
-          });
-        }
+          }
+        });
+        importedChats++;
+        utils.customEvent('importUpdate', { progress: importedChats/totalChats });   // finished import of chat
       });
-    });
+    }, 50*counter);
   }
 
   // import chats without media
+  counter = 0;
   for(const file of store.files) {
-    // msg: import chat <file>
-    parseFile(file);
+    counter++;
+    setTimeout(() => {
+      parseFile(file);
+      importedChats++;
+      utils.customEvent('importUpdate', { progress: importedChats/totalChats });
+    }, 50*counter);
   }
-
-  // msg: import done
 }
 
 async function isChatFile(file) {

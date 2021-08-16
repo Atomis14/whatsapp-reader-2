@@ -41,7 +41,7 @@
     }
 
     &.active {
-      background-color: lightgrey;
+      background-color: $color-grey-light;
     }
   }
 </style>

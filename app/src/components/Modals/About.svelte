@@ -1,5 +1,5 @@
 <script>
-  import ModalButtons from './ModalButtons.svelte';
+  import ModalButtons from './partials/ModalButtons.svelte';
   import { getModal } from '../Modal.svelte';
 
   let resetButtonLabel = 'Reset app';

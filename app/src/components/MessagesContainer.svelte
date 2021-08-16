@@ -76,6 +76,7 @@
   .MessagesContainer {
     height: 100vh;
     width: 100%;
+    background-color: #fafafa;
 
     .messages {
       height: 100%;

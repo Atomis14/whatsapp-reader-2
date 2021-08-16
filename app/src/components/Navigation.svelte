@@ -14,10 +14,11 @@
 <style lang="scss">
   .Navigation {
     padding: 15px 10px;
-    background-color: $color-grey-light;
+    background-color: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-bottom: 1px solid $color-grey-light;
 
     &__link {
       &:hover {
