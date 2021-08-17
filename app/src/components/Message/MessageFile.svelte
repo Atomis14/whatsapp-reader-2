@@ -1,23 +1,14 @@
 <script>
+  import MessageDownloadLink from './partials/MessageDownloadLink.svelte';
+
   export let message;
+
+  const path = window.electron.utils.getFilePath(message);
 </script>
 
 <div class="MessageFile">
-  <a>
-    <img src="images/file.svg" alt="favicon">
-    {message.content}
-  </a>
+  <MessageDownloadLink bind:message path={path} type='file' />
 </div>
 
 <style lang="scss">
-  .MessageFile {
-    a {
-      display: inline-flex;
-      align-items: center;
-      text-decoration: none;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
 </style>

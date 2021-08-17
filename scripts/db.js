@@ -1,5 +1,6 @@
 const utils = require('./utils.js');
-const db = utils.setupDB();
+const db = utils.setupDB()
+require('dotenv').config();
 
 let store = {
   chats: [],
@@ -11,7 +12,7 @@ function getChats() {
 }
 
 function loadMessages(id, offset=0) {
-  return db.prepare("SELECT * FROM messages WHERE chat=? ORDER BY id DESC LIMIT 20 OFFSET ?").all(id, offset);
+  return db.prepare('SELECT * FROM messages WHERE chat=? ORDER BY id DESC LIMIT 50 OFFSET ?').all(id, offset);
 }
 
 module.exports = {

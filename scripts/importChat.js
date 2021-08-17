@@ -78,9 +78,9 @@ function startImport() {
             });
           }
         });
-        importedChats++;
-        utils.customEvent('importUpdate', { progress: importedChats/totalChats });   // finished import of chat
       });
+      importedChats++;
+      utils.customEvent('importUpdate', { progress: importedChats/totalChats });   // finished import of chat
     }, 50*counter);
   }
 

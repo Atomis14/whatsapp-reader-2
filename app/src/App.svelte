@@ -1,10 +1,10 @@
 <script>
 	import ChatsContainer from './components/ChatsContainer.svelte';
 	import MessagesContainer from './components/MessagesContainer.svelte';
+	import Notification from './components/Notification.svelte';
 	import Modal from './components/Modal.svelte';
 	import ChatImport from './components/Modals/ChatImport.svelte';
 	import About from './components/Modals/About.svelte';
-
 </script>
 
 <main>
@@ -17,6 +17,8 @@
 	<Modal id="about" visible={false} title="About">
 		<About />
 	</Modal>
+
+	<Notification />
 </main>
 
 <style lang="scss">

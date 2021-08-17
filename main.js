@@ -91,8 +91,8 @@ app.whenReady().then(() => {
     }
   });
 
-  ipcMain.on('getUserDataPath', (event) => {
-    event.returnValue = app.getPath('userData');
+  ipcMain.on('getPath', (event, name) => {
+    event.returnValue = app.getPath(name);
   });
 
   //console.log(app.getPath('userData')); // ort für user uploaded content

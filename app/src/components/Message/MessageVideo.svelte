@@ -1,12 +1,12 @@
 <script>
   import { onMount } from 'svelte';
-  import { createMessageLink } from '../../utils.js';
+  import MessageDownloadLink from './partials/MessageDownloadLink.svelte';
   import { Video } from 'video-metadata-thumbnails';
 
   export let message;
 
   let active = false;
-  let videoPath = createMessageLink(message);
+  const path = window.electron.utils.getFilePath(message);
   let video;
 
   $: {
@@ -24,7 +24,7 @@
   let thumbnail;
 
   onMount(async () => {
-    const videoReader = new Video(videoPath);
+    const videoReader = new Video(path);
     
     const metaData = await videoReader.getMetadata();
     
@@ -43,10 +43,10 @@
     <img src={thumbnail} on:click={toggleOverlay} class="image">
   </div>
   <br>
-  {message.content}
+  <MessageDownloadLink bind:message path={path} type='video' />
   <div class="overlay" on:click={toggleOverlay}>
     <video controls class="video" bind:this={video}>
-      <source src={videoPath}>
+      <source src={path}>
     </video>
     <img src="images/close-white.svg" class="closeButton" on:click={toggleOverlay}> 
   </div>

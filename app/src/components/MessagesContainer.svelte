@@ -1,7 +1,7 @@
 <script>
   import { afterUpdate, beforeUpdate } from 'svelte';
   import { chatStore } from '../store.js';
-  import MessageMetaInformations from './Message/MessageMetaInformations.svelte';
+  import MessageMetaInformations from './Message/partials/MessageMetaInformations.svelte';
   import MessageText from './Message/MessageText.svelte';
   import MessageSystem from './Message/MessageSystem.svelte';
   import MessageImage from './Message/MessageImage.svelte';
@@ -77,6 +77,7 @@
     height: 100vh;
     width: 100%;
     background-color: #fafafa;
+    overflow-x: hidden;
 
     .messages {
       height: 100%;
@@ -86,6 +87,7 @@
 
       .message {
         margin-bottom: 15px;
+        word-wrap: break-word;
         &.system {
           margin: 20px 0;
           font-size: $font-size-sm;

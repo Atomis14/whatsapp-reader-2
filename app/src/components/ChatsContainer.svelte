@@ -23,6 +23,7 @@
     flex-shrink: 0;
     width: 350px;
     background-color: #fafafa;
+    border-right: 1px solid $color-grey-light;
     &__chats {
       overflow-y: auto;
       height: 100%;

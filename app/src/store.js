@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 
+
 function chatHandler() {
   const defaultData = {
     currentId: null,
@@ -19,7 +20,7 @@ function chatHandler() {
         messages: []
       });
     } else {
-      currentOffset += 30;
+      currentOffset += 50;
     }
 
     const olderMessages = window.electron.db.loadMessages(id, currentOffset);   // load newest messages (reverse order because newest messages alre loaded first like in every chat)

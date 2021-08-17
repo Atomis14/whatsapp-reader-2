@@ -1,14 +1,17 @@
 <script>
+  import MessageDownloadLink from './partials/MessageDownloadLink.svelte';
+
   export let message;
 
-  const src = window.electron.utils.createMessageLink(message);
+  const path = window.electron.utils.getFilePath(message);
 </script>
 
 <div class="MessageAudio">
   <audio controls>
-    <source src={src}>
-    {message.content}
+    <source src={path}>
   </audio>
+  <br>
+  <MessageDownloadLink bind:message path={path} type='audio' />
 </div>
 
 <style lang="scss">

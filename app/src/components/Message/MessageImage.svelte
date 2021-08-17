@@ -1,8 +1,10 @@
 <script>
+  import MessageDownloadLink from './partials/MessageDownloadLink.svelte';
+
   export let message;
 
   let active = false;
-  let imagePath = window.electron.utils.createMessageLink(message);
+  const path = window.electron.utils.getFilePath(message);
 
   function toggleOverlay(e) {
     e.stopPropagation();
@@ -12,11 +14,11 @@
 </script>
 
 <div class="MessageImage" class:active={active}>
-  <img src={imagePath} on:click={toggleOverlay} class="image">
+  <img src={path} on:click={toggleOverlay} class="image">
   <br>
-  {message.content}
+  <MessageDownloadLink bind:message path={path} type='image' />
   <div class="overlay" on:click={toggleOverlay}>
-    <img src={imagePath} class="bigImage">
+    <img src={path} class="bigImage">
     <img src="images/close-white.svg" class="closeButton" on:click={toggleOverlay}> 
   </div>
 </div>

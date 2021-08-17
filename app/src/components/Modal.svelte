@@ -52,7 +52,7 @@
     height: 100%;
     background-color: rgba(black, 0.4);
     padding: 50px;
-    z-index: 10;
+    z-index: 3;
     &.show {
       display: flex;
     }

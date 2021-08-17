@@ -2,13 +2,13 @@ const { ipcRenderer, shell } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
 const sqlite = require('better-sqlite3');
+const { v4: uuid } = require('uuid');
 
 store = {
-  userDataPath: ipcRenderer.sendSync('getUserDataPath')
+  userDataPath: ipcRenderer.sendSync('getPath', 'userData')
 }
 
 function setupDB() {
-  //const userDataPath = ipcRenderer.sendSync('getUserDataPath');
   const db = new sqlite(path.join(store.userDataPath, 'chats.sqlite3'));
   const stmt = `
     CREATE TABLE IF NOT EXISTS chats (
@@ -44,7 +44,6 @@ function resetApp() {
   // delete chats folder in appdata
   fs.rmdir(path.join(store.userDataPath, 'chats'), { recursive: true }, (err) => {
     if(err) throw err;
-    console.log('Removed path successfully.');
     location.reload();
   });
 }
@@ -58,8 +57,32 @@ function openInBrowser(url) {
   shell.openExternal(url);
 }
 
-function createMessageLink(message) {
+function showFileInExplorer(file) {
+  shell.showItemInFolder(file);
+}
+
+function getFilePath(message) {
   return path.join(store.userDataPath, 'chats', String(message.chat), message.content);
+}
+
+function copyFileToDownloads(file) {  
+  const downloadsFolder = ipcRenderer.sendSync('getPath', 'downloads');
+  let newLocation = path.join(downloadsFolder, path.basename(file));
+
+  const extension = path.extname(file);
+  const filename = path.basename(file, extension);
+
+  let counter = 1;
+  while(fs.existsSync(newLocation)) {
+    newLocation = path.join(downloadsFolder, `${filename} (${counter})${extension}`);
+    counter++;
+  }
+
+  fs.copy(file, newLocation, { overwrite: false, preserveTimestamps: false })
+    .then(() => {
+      customEvent('notification', { id: uuid(), message: 'File added to downloads folder.', file: newLocation });
+    })
+    .catch(e => console.error(e));
 }
 
 module.exports = {
@@ -67,6 +90,8 @@ module.exports = {
   resetApp,
   customEvent,
   openInBrowser,
-  createMessageLink,
+  showFileInExplorer,
+  getFilePath,
+  copyFileToDownloads,
   store
 }
